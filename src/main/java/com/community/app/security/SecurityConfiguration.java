@@ -1,5 +1,6 @@
 package com.community.app.security;
 
+import com.community.app.configuration.CustomAuthEntryPoint;
 import com.community.app.security.oauth.PrincipalOauth2UserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
