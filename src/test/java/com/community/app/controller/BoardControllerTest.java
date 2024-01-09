@@ -17,12 +17,12 @@ import org.springframework.test.web.servlet.MockMvc;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest
 @RunWith(SpringRunner.class)
 public class BoardControllerTest {
+    // 진정한 TDD는.. 테스트 데이터가 3개는 되어야 한다
 
     @Autowired
     MockMvc mockMvc; // 가짜 요청을 보내서 디스패처 서블릿에게 보내고 응답이 가능해짐
@@ -51,7 +51,9 @@ public class BoardControllerTest {
                         .content(objectMapper.writeValueAsString(post)))
                 .andDo(print()) // 콘솔에서 어떤 요청과 응답을 받았는지 볼 수 있음
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("pidx").exists());
+                .andExpect(jsonPath("pidx").exists())
+                .andExpect(header().exists("Location")) // 헤더에 값이 있는지
+                .andExpect(header().string("Content-Type", "application/hal+json"));
     }
 
 }
