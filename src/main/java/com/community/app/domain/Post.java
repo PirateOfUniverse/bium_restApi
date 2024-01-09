@@ -2,8 +2,13 @@ package com.community.app.domain;
 
 import lombok.*;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+
 @Getter @Setter @EqualsAndHashCode(of = "pidx")
 @Builder @AllArgsConstructor @NoArgsConstructor
+@Entity
 public class Post {
     // ctrl + shift + T = 새 테스트 생성 or 테스트코드로 이동
 
@@ -14,7 +19,8 @@ public class Post {
     // pidx의 값만 가지고 equals, hashcode를 비교하게됨(다른필드로도 가능)
     // @Data도 스택 오버플로우 가능성이 있으므로 쓰지 않는것을 권장함
 
-    private int pidx; // 게시물 번호
+    @Id @GeneratedValue
+    private Integer pidx; // 게시물 번호
     private int idx; // 게시물 작성자 고유번호
     private String title; // 게시물 제목
     private String writer; // 게시물 작성자
@@ -26,21 +32,4 @@ public class Post {
     private Integer postVote;
     private String regdate; // 게시물 작성일자
 
-//    public Post() {}
-//
-//    public Post(int pidx, int idx, String title, String writer, String category,
-//                String content,int replyCount, int hit, int heartCount,
-//                Integer postVote,String regdate) {
-//        this.pidx = pidx;
-//        this.idx = idx;
-//        this.title = title;
-//        this.writer = writer;
-//        this.category = category;
-//        this.content = content;
-//        this.replyCount = replyCount;
-//        this.hit = hit;
-//        this.heartCount = heartCount;
-//        this.postVote = postVote;
-//        this.regdate = regdate;
-//    }
 }

@@ -2,7 +2,6 @@ package com.community.app.domain;
 
 
 import org.junit.jupiter.api.Test;
-import org.springframework.security.core.parameters.P;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

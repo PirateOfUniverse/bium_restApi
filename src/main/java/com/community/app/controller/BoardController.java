@@ -1,30 +1,46 @@
 package com.community.app.controller;
 
+
 import com.community.app.domain.Post;
-import com.community.app.domain.Reply;
-import com.community.app.domain.Vote;
-import com.community.app.dto.HeartVO;
-import com.community.app.dto.PagingVO;
-import com.community.app.dto.PostUpdateDto;
-import com.community.app.dto.VoteSubDto;
-import com.community.app.service.BoardService;
-import com.community.app.service.ReplyService;
-import com.community.app.service.VoteService;
-import org.jsoup.Jsoup;
-import org.jsoup.safety.Safelist;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
+import com.community.app.repository.BoardRepository;
+import org.springframework.hateoas.MediaTypes;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
-import java.util.List;
-import java.util.Map;
+import java.net.URI;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Controller
+@RequestMapping(value = "/api/write", produces = MediaTypes.HAL_JSON_VALUE)
 public class BoardController {
 
+    private final BoardRepository boardRepository;
+
+    public BoardController(BoardRepository boardRepository) {
+        this.boardRepository = boardRepository;
+    }
+
+    @PostMapping
+    public ResponseEntity createPost(@RequestBody Post post) {
+        Post newPost = this.boardRepository.save(post);
+        // 저장이 된 객체가 나옴
+
+        URI createUri = linkTo(BoardController.class)
+                .slash(newPost.getPidx()).toUri();
+        // pidx에 해당하는 링크를 만든다
+        post.setPidx(1);
+        return ResponseEntity.created(createUri).body(post);
+    }
+
+    /*
+     * 여기는 참고하려고 남겨놓은 일반컨트롤러
+     * */
+
+
+    /*
     @Autowired
     BoardService boardService;
 
@@ -37,7 +53,7 @@ public class BoardController {
     ControllerMethods methods = new ControllerMethods();
     // 컨트롤러에서 공통적으로 쓰이는 메서드들의 클래스(페이징, 회원 고유번호(idx) 불러오기)
 
-    /* 게시판 + 게시물 관련 기능 */
+    *//* 게시판 + 게시물 관련 기능 *//*
 
     // 게시물 작성 페이지로 이동
     @GetMapping("/write")
@@ -246,7 +262,7 @@ public class BoardController {
         //return "redirect:/board/"+category;
     }
 
-    /* 댓글 관련 기능 */
+    *//* 댓글 관련 기능 *//*
 
     // 댓글 작성
     @PostMapping("/writeReply")
@@ -283,7 +299,7 @@ public class BoardController {
         return "redirect:"+referer;
     }
 
-    /* 대댓글 관련 기능 */
+    *//* 대댓글 관련 기능 *//*
     
     // 대댓글 작성
     @PostMapping("/writeReReply")
@@ -297,7 +313,7 @@ public class BoardController {
     }
 
 
-    /* 게시물 추천 관련 기능 */
+    *//* 게시물 추천 관련 기능 *//*
     
     // 게시물 추천
     @ResponseBody
@@ -330,6 +346,6 @@ public class BoardController {
         model.addAttribute("data", boardService.searchPostsAll(keyword, vo.getStart(), vo.getEnd()));
 
         return "searchPosts";
-    }
+    }*/
 
 }
